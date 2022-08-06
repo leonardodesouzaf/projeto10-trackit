@@ -1,17 +1,37 @@
 import Group8 from "./assets/Group8.png";
 import styled from 'styled-components';
-import { Link } from "react-router-dom";
+import { useNavigate , Link } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
 
 export default function RegisterDisplay(){
+    const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+    const [name, setName] = useState("");
+	const [picture, setPicture] = useState("");
+    const navigate = useNavigate();
+    function registerIn (event) {
+        event.preventDefault();
+		const requisition = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up", {
+			email: email,
+            name: name,
+            image: picture,
+			password: password
+		});
+        requisition.catch(() => {alert("Registro não efetuado! Tente novamente!")});
+        requisition.then(() => {navigate("/")});
+    }
     return(
         <>
             <Content>
                 <Logo src={Group8} alt='app logo'/>
-                <Input placeholder="email" type="email" required/>
-                <Input placeholder="senha"type="password" required/>
-                <Input placeholder="nome" type="text" required/>
-                <Input placeholder="foto" type="text" required/>
-                <Button>Cadastrar</Button>
+                <Form onSubmit={registerIn}>
+                    <Input placeholder="email" type="email" required onChange={e => setEmail(e.target.value)}/>
+                    <Input placeholder="senha" type="password" required onChange={e => setPassword(e.target.value)}/>
+                    <Input placeholder="nome" type="text" required onChange={e => setName(e.target.value)}/>
+                    <Input placeholder="foto" type="url" required onChange={e => setPicture(e.target.value)}/>
+                    <Button type="submit">Cadastrar</Button>
+                </Form>
                 <Link to="/">
                     <Register>Já tem uma conta? Faça login!</Register>
                 </Link>
@@ -19,6 +39,13 @@ export default function RegisterDisplay(){
         </>
     )
 }
+
+const Form = styled.form`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+`;
 
 const Content = styled.div`
     width: 100vw;

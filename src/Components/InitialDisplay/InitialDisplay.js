@@ -1,15 +1,31 @@
 import Group8 from "./assets/Group8.png";
 import styled from 'styled-components';
-import { Link } from "react-router-dom";
+import { useNavigate , Link } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
 
 export default function InitialDisplay(){
+    const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+    const navigate = useNavigate();
+    function logIn (event) {
+        event.preventDefault();
+		const requisition = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", {
+			email: email,
+			password: password
+		});
+        requisition.catch(() => {alert("Login não efetuado! Tente novamente!")});
+        requisition.then(() => {navigate("/hoje")});
+    }
     return(
         <>
             <Content>
                 <Logo src={Group8} alt='app logo'/>
-                <Input placeholder="email" type="email" required/>
-                <Input placeholder="senha"type="password" required/>
-                <Button>Entrar</Button>
+                <Form onSubmit={logIn}>
+                    <Input placeholder="email" type="email" required onChange={e => setEmail(e.target.value)}/>
+                    <Input placeholder="senha" type="password" required onChange={e => setPassword(e.target.value)}/>
+                    <Button type="submit">Entrar</Button>
+                </Form>
                 <Link to="/cadastro">
                     <Register>Não tem uma conta? Cadastre-se!</Register>
                 </Link>
@@ -17,6 +33,13 @@ export default function InitialDisplay(){
         </>
     )
 }
+
+const Form = styled.form`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+`;
 
 const Content = styled.div`
     width: 100vw;

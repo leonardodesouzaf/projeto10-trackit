@@ -1,15 +1,18 @@
 import Group8 from "./assets/Group8.png";
 import styled from 'styled-components';
+import { Link } from "react-router-dom";
 
 export default function InitialDisplay(){
     return(
         <>
             <Content>
                 <Logo src={Group8} alt='app logo'/>
-                <Input placeholder="email"/>
-                <Input placeholder="senha"/>
+                <Input placeholder="email" type="email" required/>
+                <Input placeholder="senha"type="password" required/>
                 <Button>Entrar</Button>
-                <Register>Não tem uma conta? Cadastre-se!</Register>
+                <Link to="/cadastro">
+                    <Register>Não tem uma conta? Cadastre-se!</Register>
+                </Link>
             </Content>
         </>
     )
@@ -45,7 +48,9 @@ const Input = styled.input`
     font-size: 19.976px;
     line-height: 25px;
     color: #D4D4D4;
-    opacity: 0.5;
+    ::placeholder{
+        color: #D4D4D4;
+    }
 `;
 
 const Button = styled.button`

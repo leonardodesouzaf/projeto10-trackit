@@ -30,11 +30,27 @@ export default function HabitsDisplay(){
         }
     },[]);
     const [creatingHabit, setCreatingHabit] = useState(<></>);
+    const [habit, setHabit] = useState("");
+    function saveHabit (event) {
+        event.preventDefault();
+		const requisition = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", {
+			name: habit,
+		});
+        requisition.catch(() => {alert("Problema ao salvar hábito! Tente novamente!")});
+        requisition.then((answer) => {});
+    }
     function renderCreatingHabit(){
         setCreatingHabit(
             <>
                 <CreatingDiv>
-                    
+                    <Form onSubmit={saveHabit}>
+                        <Input placeholder="nome do hábito" type="text" required onChange={e => setHabit(e.target.value)}></Input>
+                        <DaysSelection>maue
+
+                        </DaysSelection>
+                        <SaveButton>Salvar</SaveButton>
+                        <CancelButton>Cancelar</CancelButton>
+                    </Form>
                 </CreatingDiv>
             </>
         );
@@ -62,11 +78,81 @@ export default function HabitsDisplay(){
     )
 }
 
+const DaysSelection = styled.div`
+    display: flex;
+    width: 100%;
+    justify-content: start;
+`;
+
+const SaveButton = styled.div`
+    height: 35px;
+    background-color: #52B6FF;
+    border-radius: 4.63636px;
+    font-family: 'Lexend Deca';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15.976px;
+    line-height: 20px;
+    text-align: center;
+    color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 22.4vw;
+    position: absolute;
+    bottom: 18px;
+    right: 18px;
+`;
+
+const CancelButton = styled.div`
+    font-family: 'Lexend Deca';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15.976px;
+    line-height: 20px;
+    text-align: center;
+    color: #52B6FF;
+    position: absolute;
+    bottom: 25px;
+    right: 32vw;
+`;
+
+const Form = styled.form`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+`;
+
+const Input = styled.input`
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    padding-left: 11px;
+    border: 1px solid #D5D5D5;
+    border-radius: 5px;
+    width: 100%;
+    height: 45px;
+    margin-bottom: 6px;
+    text-decoration: none;
+    font-family: 'Lexend Deca';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 19.976px;
+    line-height: 25px;
+    color: #DBDBDB;
+    ::placeholder{
+        color: #DBDBDB;
+    }
+`;
+
 const CreatingDiv = styled.div`
+    box-sizing: border-box;
+    padding: 18px;
     background-color: #FFFFFF;
     border-radius: 5px;
     height: 180px;
     width: 100%;
+    position: relative;
 `;
 
 const NoneAdvise = styled.div`

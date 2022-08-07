@@ -28,7 +28,17 @@ export default function HabitsDisplay(){
                 setHabitsContent(habitsList.map((habito,index) => <Habit key={index} days={habito.days} name={habito.name}/>));
             }
         }
-        },[]);
+    },[]);
+    const [creatingHabit, setCreatingHabit] = useState(<></>);
+    function renderCreatingHabit(){
+        setCreatingHabit(
+            <>
+                <CreatingDiv>
+                    
+                </CreatingDiv>
+            </>
+        );
+    }
     return(
         <>
             <Header>
@@ -38,8 +48,9 @@ export default function HabitsDisplay(){
             <Content>
                 <Title>
                     <p>Meus hábitos</p>
-                    <PlusIcon><ion-icon name="add-outline"></ion-icon></PlusIcon>
+                    <PlusIcon><ion-icon name="add-outline" onClick={renderCreatingHabit}></ion-icon></PlusIcon>
                 </Title>
+                {creatingHabit}
                 {habitsContent}
             </Content>
             <Footer>
@@ -50,6 +61,13 @@ export default function HabitsDisplay(){
         </>
     )
 }
+
+const CreatingDiv = styled.div`
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    height: 180px;
+    width: 100%;
+`;
 
 const NoneAdvise = styled.div`
     font-family: 'Lexend Deca';

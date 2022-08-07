@@ -3,8 +3,11 @@ import styled from 'styled-components';
 import { useNavigate , Link } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import { useContext } from "react";
+import UserContext from "../../contexts/UserContext";
 
 export default function InitialDisplay(){
+    const { tasks, setTasks } = useContext(UserContext);
     const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
     const navigate = useNavigate();
@@ -15,7 +18,10 @@ export default function InitialDisplay(){
 			password: password
 		});
         requisition.catch(() => {alert("Login não efetuado! Tente novamente!")});
-        requisition.then(() => {navigate("/hoje")});
+        requisition.then((answer) => {
+            setTasks(answer.data);
+            navigate("/hoje");
+        });
     }
     return(
         <>

@@ -4,10 +4,13 @@ import RegisterDisplay from "../RegisterDisplay/RegisterDisplay";
 import HabitsDisplay from "../HabitsDisplay/HabitsDisplay";
 import TodayDisplay from "../TodayDisplay/TodayDisplay";
 import HistoryDisplay from "../HistoryDisplay/HistoryDisplay";
+import { useState } from "react";
+import UserContext from "../../contexts/UserContext";
 
 export default function App(){
+    const [tasks, setTasks] = useState([]);
     return(
-        <>
+        <UserContext.Provider value={{tasks, setTasks}}>
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<InitialDisplay />} />
@@ -17,6 +20,6 @@ export default function App(){
                     <Route path="/historico" element={<HistoryDisplay />} />
                 </Routes>
 		    </BrowserRouter>
-        </>
+        </UserContext.Provider>
     )
 }

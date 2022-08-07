@@ -1,21 +1,34 @@
 import styled from 'styled-components';
 import { useNavigate , Link } from "react-router-dom";
-import { useState } from "react";
+import { useState , useEffect } from "react";
 import axios from "axios";
-import dayjs from 'dayjs';
 import { useContext } from "react";
 import UserContext from "../../contexts/UserContext";
+import Habit from './Habit';
 
 export default function HabitsDisplay(){
     const { tasks, setTasks } = useContext(UserContext);
+    const [habitsContent, setHabitsContent] = useState(<></>);
     const navigate = useNavigate();
-    const requisition = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", {
+    useEffect(() => {
+        const requisition = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", {
             headers: {"Authorization": `Bearer ${tasks.token}`} 
 		});
         requisition.catch(() => {alert("Erro ao carregar os hábitos! Tente novamente!")});
-        requisition.then((answer) => {
-            console.log(answer, 'lista de habitos');
-        });
+        requisition.then(renderHabits);
+        function renderHabits(answer){
+            let habitsList = answer.data;
+            if(answer.data === []){
+                setHabitsContent(
+                    <>
+                        Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!
+                    </>
+                );
+            }else{
+                setHabitsContent(habitsList.map((habito,index) => <Habit key={index} days={habito.days} name={habito.name}/>));
+            }
+        }
+        },[]);
     return(
         <>
             <Header>
@@ -27,6 +40,7 @@ export default function HabitsDisplay(){
                     <p>Meus hábitos</p>
                     <PlusIcon><ion-icon name="add-outline"></ion-icon></PlusIcon>
                 </Title>
+                {habitsContent}
             </Content>
             <Footer>
                 <FooterButton onClick={() => navigate('/habitos')}>Hábitos</FooterButton>
@@ -37,12 +51,22 @@ export default function HabitsDisplay(){
     )
 }
 
+const NoneAdvise = styled.div`
+    font-family: 'Lexend Deca';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 17.976px;
+    line-height: 22px;
+    color: #666666;
+`;
+
 const Title = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
     margin-top: 22px;
+    margin-bottom: 10px;
     p{
         font-family: 'Lexend Deca';
         font-style: normal;

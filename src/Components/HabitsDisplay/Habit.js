@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useState } from "react";
+import axios from "axios";
 export default function Habit(props){
     const [habitDays, setHabitDays] = useState([]);
     let arrayDays = props.days;
@@ -24,6 +25,11 @@ export default function Habit(props){
         habitRenderDays = [habitDays.at(-1), ...habitDays];
         habitRenderDays.pop();
     }
+    function removeHabit(){
+        const requisition = axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${props.id}`,{headers: {"Authorization": `Bearer ${props.token}`}});
+            requisition.catch(() => {alert("O hábito não foi removido! Tente novamente!")});
+            requisition.then((answer) => {props.setRefreshHabitsList(!props.refreshHabitsList)});
+    }
     return(
         <>
             <Content>
@@ -33,7 +39,7 @@ export default function Habit(props){
                 <Days>
                     {habitRenderDays}
                 </Days>
-                <TrashIcon><ion-icon name="trash-outline"></ion-icon></TrashIcon>
+                <TrashIcon onClick={removeHabit}><ion-icon name="trash-outline"></ion-icon></TrashIcon>
             </Content>
         </>
     )

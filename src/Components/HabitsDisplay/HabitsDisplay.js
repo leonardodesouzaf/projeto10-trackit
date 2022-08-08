@@ -26,18 +26,16 @@ export default function HabitsDisplay(){
                     </>
                 );
             }else{
-                setHabitsContent(habitsList.map((habito,index) => <Habit key={index} days={habito.days} name={habito.name}/>));
+                setHabitsContent(habitsList.map((habito,index) => <Habit key={index} days={habito.days} name={habito.name} token={tasks.token} id={habito.id} setRefreshHabitsList={setRefreshHabitsList} refreshHabitsList={refreshHabitsList}/>));
             }
         }
     },[refreshHabitsList]);
     const [isCreateHabit, setIsCreateHabit] = useState(false);
-    const [createHabit, setCreateHabit] = useState(<></>);
-    const [clickDay1, setClickDay1] = useState(false);
     return(
         <>
             <Header>
                 TrackIt
-                <UserPic src='https://zonacuriosa.com/wp-content/uploads/2020/11/curiosidades-incriveis-sobre-o-patrick-estrela-758x455.jpg' alt='user profile pic'/>
+                <UserPic src={tasks.image} alt='user profile pic'/>
             </Header>
             <Content>
                 <Title>
@@ -49,7 +47,7 @@ export default function HabitsDisplay(){
             </Content>
             <Footer>
                 <FooterButton onClick={() => navigate('/habitos')}>Hábitos</FooterButton>
-                <TodayButton>Hoje</TodayButton>
+                <TodayButton onClick={() => navigate('/hoje')}>Hoje</TodayButton>
                 <FooterButton onClick={() => navigate('/historico')}>Histórico</FooterButton>
             </Footer>
         </>
@@ -97,6 +95,7 @@ function CreateHabit(props){
             requisition.then((answer) => {
                 props.setIsCreateHabit(false);
                 props.setRefreshHabitsList(!props.refreshHabitsList);
+
             });
         }
     }
@@ -357,11 +356,12 @@ const FooterButton = styled.div`
 
 const Content = styled.div`
     width: 100%;
-    height: 100vh;
+    height: auto;
 	display: flex;
     flex-direction: column;
     box-sizing: border-box;
     padding: 70px 17px 70px 17px;
+    margin-bottom: 10px;
     background-color: #EBEBEB;
 `;
 
@@ -394,30 +394,3 @@ const Header = styled.div`
     top: 0;
     left: 0;
 `;
-
-
-
-    /* const [selectionedHabits, setSelectionedHabits] = useState([1,2]);
-    const [habitDays, setHabitDays] = useState([]);
-    let arrayDays = [...selectionedHabits];
-    const weekDays = ['S','T','Q','Q','S','S','D'];
-    if(habitDays.length<7){
-        for(let i=0; i<7; i++){
-            let weekDay = i+1;
-            let itsEqual = false;
-            for(let j=0; j<arrayDays.length; j++){
-                if(arrayDays[j]===weekDay){
-                    habitDays.push(<SelectionedDay key={i}>{weekDays[i]}</SelectionedDay>);
-                    itsEqual = true;
-                }
-            }
-            if(itsEqual === false){    
-                habitDays.push(<DiselectionedDay onClick={() => {selectionedHabits.push(weekDay)}} key={i}>{weekDays[i]}</DiselectionedDay>);
-            }
-        }
-    }
-    let habitRenderDays;
-    if(habitDays.length === 7){
-        habitRenderDays = [habitDays.at(-1), ...habitDays];
-        habitRenderDays.pop();
-    } */

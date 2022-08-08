@@ -3,8 +3,11 @@ import { useNavigate , Link } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import dayjs from 'dayjs';
+import { useContext } from "react";
+import UserContext from "../../contexts/UserContext";
 
 export default function TodayDisplay(){
+    const { tasks, setTasks } = useContext(UserContext);
     require('dayjs/locale/pt-br');
     let dayName = dayjs().locale('pt-br');
     const navigate = useNavigate();
@@ -12,7 +15,7 @@ export default function TodayDisplay(){
         <>
             <Header>
                 TrackIt
-                <UserPic src='https://zonacuriosa.com/wp-content/uploads/2020/11/curiosidades-incriveis-sobre-o-patrick-estrela-758x455.jpg' alt='user profile pic'/>
+                <UserPic src={tasks.image} alt='user profile pic'/>
             </Header>
             <Content>
                 <DayName>

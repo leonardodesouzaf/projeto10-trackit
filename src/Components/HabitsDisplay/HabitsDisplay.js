@@ -19,7 +19,6 @@ export default function HabitsDisplay(){
         requisition.then(renderHabits);
         function renderHabits(answer){
             let habitsList = answer.data;
-            console.log(habitsList);
             if(habitsList.length === 0){
                 setHabitsContent(
                     <NonHabitsText>

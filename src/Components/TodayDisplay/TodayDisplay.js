@@ -1,16 +1,39 @@
 import styled from 'styled-components';
 import { useNavigate , Link } from "react-router-dom";
-import { useState } from "react";
 import axios from "axios";
 import dayjs from 'dayjs';
 import { useContext } from "react";
 import UserContext from "../../contexts/UserContext";
+import TodayHabit from './TodayHabit';
+import { useState , useEffect } from "react";
 
 export default function TodayDisplay(){
     const { tasks, setTasks } = useContext(UserContext);
     require('dayjs/locale/pt-br');
     let dayName = dayjs().locale('pt-br');
     const navigate = useNavigate();
+    const [habitsContent, setHabitsContent] = useState(<></>);
+    const [refreshHabitsList, setRefreshHabitsList] = useState(false);
+    useEffect(() => {
+        const requisition = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", {
+            headers: {"Authorization": `Bearer ${tasks.token}`} 
+		});
+        requisition.catch(() => {alert("Erro ao carregar os hábitos! Tente novamente!")});
+        requisition.then(renderHabits);
+        function renderHabits(answer){
+            let habitsList = answer.data;
+            if(habitsList.length === 0){
+                setHabitsContent(
+                    <NonHabitsText>
+                        Você não tem nenhum hábito cadastrado para hoje. Adicione mais hábitos!
+                    </NonHabitsText>
+                );
+            }
+            if(habitsList.length !== 0){
+                setHabitsContent(habitsList.map((habito,index) => <TodayHabit key={index} done={habito.done} name={habito.name} token={tasks.token} id={habito.id} currentSequence={habito.currentSequence} highestSequence={habito.highestSequence}/>));
+            }
+        }
+    },[refreshHabitsList]);
     return(
         <>
             <Header>
@@ -25,7 +48,7 @@ export default function TodayDisplay(){
                     Nenhum hábito concluído ainda
                 </CompleteRate>
                 <HabitsList>
-                    Habitos aqui
+                    {habitsContent}
                 </HabitsList>
             </Content>
             <Footer>
@@ -38,7 +61,17 @@ export default function TodayDisplay(){
 }
 
 const HabitsList = styled.div`
-    background-color: pink;
+    
+`;
+
+const NonHabitsText = styled.div`
+    font-family: 'Lexend Deca';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 17.976px;
+    line-height: 22px;
+    color: #666666;
+    margin-top: 22px;
 `;
 
 const TodayButton = styled.div`

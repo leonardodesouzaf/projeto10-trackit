@@ -44,9 +44,9 @@ export default function CreateHabit(props){
             }, {headers: {"Authorization": `Bearer ${props.token}`}});
             requisition.catch(() => {alert("O hábito não foi salvado! Tente novamente!")});
             requisition.then((answer) => {
-                props.setIsCreateHabit(false);
-                setIsLoading(false);
                 props.setRefreshHabitsList(!props.refreshHabitsList);
+                setIsLoading(false);
+                props.setIsCreateHabit(false);
             });
         }
     }

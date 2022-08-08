@@ -6,6 +6,7 @@ import { useContext } from "react";
 import UserContext from "../../contexts/UserContext";
 import TodayHabit from './TodayHabit';
 import { useState , useEffect } from "react";
+import { buildStyles, CircularProgressbar, CircularProgressbarWithChildren } from 'react-circular-progressbar';
 
 export default function TodayDisplay(){
     const { tasks, setTasks } = useContext(UserContext);
@@ -85,7 +86,21 @@ export default function TodayDisplay(){
             </Content>
             <Footer>
                 <FooterButton onClick={() => navigate('/habitos')}>Hábitos</FooterButton>
-                <TodayButton onClick={() => navigate('/hoje')}>Hoje</TodayButton>
+                <TodayButton onClick={() => navigate('/hoje')}>
+                    <CircularProgressbarWithChildren
+                    value={perCentCounter}
+                    background
+                    backgroundPadding={6}
+                    styles={buildStyles({
+                        backgroundColor: '#52B6FF',
+                        textColor: 'white',
+                        pathColor: 'white',
+                        trailColor: 'transparent',
+                        pathTransitionDuration: 0.5,
+                        strokeLinecap: 'round',
+                    })}
+                    >Hoje</CircularProgressbarWithChildren>
+                </TodayButton>
                 <FooterButton onClick={() => navigate('/historico')}>Histórico</FooterButton>
             </Footer>
         </>
@@ -125,9 +140,6 @@ const TodayButton = styled.div`
     line-height: 22px;
     color: #52B6FF;
     border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     color: white;
     width: 91px;
     height: 91px;

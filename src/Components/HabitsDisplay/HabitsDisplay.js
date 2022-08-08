@@ -9,6 +9,7 @@ import Habit from './Habit';
 export default function HabitsDisplay(){
     const { tasks, setTasks } = useContext(UserContext);
     const [habitsContent, setHabitsContent] = useState(<></>);
+    const [refreshHabitsList, setRefreshHabitsList] = useState(false);
     const navigate = useNavigate();
     useEffect(() => {
         const requisition = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", {
@@ -28,7 +29,7 @@ export default function HabitsDisplay(){
                 setHabitsContent(habitsList.map((habito,index) => <Habit key={index} days={habito.days} name={habito.name}/>));
             }
         }
-    },[]);
+    },[refreshHabitsList]);
     const [isCreateHabit, setIsCreateHabit] = useState(false);
     const [createHabit, setCreateHabit] = useState(<></>);
     const [clickDay1, setClickDay1] = useState(false);
@@ -43,7 +44,7 @@ export default function HabitsDisplay(){
                     <p>Meus hábitos</p>
                     <PlusIcon><ion-icon name="add-outline" onClick={() => {setIsCreateHabit(true)}}></ion-icon></PlusIcon>
                 </Title>
-                {isCreateHabit ? <CreateHabit setIsCreateHabit={setIsCreateHabit}/> : <></>}
+                {isCreateHabit ? <CreateHabit setIsCreateHabit={setIsCreateHabit} setRefreshHabitsList={setRefreshHabitsList} refreshHabitsList={refreshHabitsList} token={tasks.token}/> : <></>}
                 {habitsContent}
             </Content>
             <Footer>
@@ -65,53 +66,85 @@ function CreateHabit(props){
     const [isDay6Selected, setIsDay6Selected] = useState(false);
     const [isDay7Selected, setIsDay7Selected] = useState(false);
     const [arrSelected, setArrSelected] = useState([]);
-    function arrSelectedDays(ans){
-
+    function arrSelectedDays(num,ans){
+        if(ans === true){
+            arrSelected.push(num);
+            setArrSelected([...arrSelected]);
+        }
+        if(ans === false){
+            const filterArr = arrSelected.filter(filterDays);
+            setArrSelected([...filterArr]);
+        }
+        function filterDays(day){
+            if(day === num){
+                return false;
+            }else{
+                return true;
+            }
+        }
     }
+    function saveHabit (event) {
+        event.preventDefault();
+        console.log(arrSelected);
+        if(arrSelected.length === 0){
+            alert("Selecione o(s) dia(s) do hábito!");
+        }else{
+            const requisition = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", {
+                name: habit,
+                days: arrSelected,
+            }, {headers: {"Authorization": `Bearer ${props.token}`}});
+            requisition.catch(() => {alert("O hábito não foi salvado! Tente novamente!")});
+            requisition.then((answer) => {
+                props.setIsCreateHabit(false);
+                props.setRefreshHabitsList(!props.refreshHabitsList);
+            });
+        }
+    }
+
 
     return(
         <>
             <CreatingDiv>
-                <Form /* onSubmit={saveHabit} */>
+                <Form onSubmit={saveHabit}>
                     <Input placeholder="nome do hábito" type="text" required onChange={e => setHabit(e.target.value)}></Input>
                     <DaysSelection>
                         {isDay7Selected ? 
-                        <SelectionedDay onClick={() => {setIsDay7Selected(!isDay7Selected); arrSelectedDays(true)}}>D</SelectionedDay>
+                        <SelectionedDay onClick={() => {setIsDay7Selected(!isDay7Selected); arrSelectedDays(7,false)}}>D</SelectionedDay>
                         :
-                        <DiselectionedDay onClick={() => {setIsDay7Selected(!isDay7Selected)}}>D</DiselectionedDay> 
+                        <DiselectionedDay onClick={() => {setIsDay7Selected(!isDay7Selected); arrSelectedDays(7,true)}}>D</DiselectionedDay> 
                         }
                         {isDay1Selected ? 
-                        <SelectionedDay onClick={() => {setIsDay1Selected(!isDay1Selected)}}>S</SelectionedDay>
+                        <SelectionedDay onClick={() => {setIsDay1Selected(!isDay1Selected); arrSelectedDays(1,false)}}>S</SelectionedDay>
                         :
-                        <DiselectionedDay onClick={() => {setIsDay1Selected(!isDay1Selected)}}>S</DiselectionedDay> 
+                        <DiselectionedDay onClick={() => {setIsDay1Selected(!isDay1Selected); arrSelectedDays(1,true)}}>S</DiselectionedDay> 
                         }
                         {isDay2Selected ? 
-                        <SelectionedDay onClick={() => {setIsDay2Selected(!isDay2Selected)}}>T</SelectionedDay>
+                        <SelectionedDay onClick={() => {setIsDay2Selected(!isDay2Selected); arrSelectedDays(2,false)}}>T</SelectionedDay>
                         :
-                        <DiselectionedDay onClick={() => {setIsDay2Selected(!isDay2Selected)}}>T</DiselectionedDay> 
+                        <DiselectionedDay onClick={() => {setIsDay2Selected(!isDay2Selected); arrSelectedDays(2,true)}}>T</DiselectionedDay> 
                         }
                         {isDay3Selected ? 
-                        <SelectionedDay onClick={() => {setIsDay3Selected(!isDay3Selected)}}>Q</SelectionedDay>
+                        <SelectionedDay onClick={() => {setIsDay3Selected(!isDay3Selected); arrSelectedDays(3,false)}}>Q</SelectionedDay>
                         :
-                        <DiselectionedDay onClick={() => {setIsDay3Selected(!isDay3Selected)}}>Q</DiselectionedDay> 
+                        <DiselectionedDay onClick={() => {setIsDay3Selected(!isDay3Selected); arrSelectedDays(3,true)}}>Q</DiselectionedDay> 
                         }
                         {isDay4Selected ? 
-                        <SelectionedDay onClick={() => {setIsDay4Selected(!isDay4Selected)}}>Q</SelectionedDay>
+                        <SelectionedDay onClick={() => {setIsDay4Selected(!isDay4Selected); arrSelectedDays(4,false)}}>Q</SelectionedDay>
                         :
-                        <DiselectionedDay onClick={() => {setIsDay4Selected(!isDay4Selected)}}>Q</DiselectionedDay> 
+                        <DiselectionedDay onClick={() => {setIsDay4Selected(!isDay4Selected); arrSelectedDays(4,true)}}>Q</DiselectionedDay> 
                         }
                         {isDay5Selected ? 
-                        <SelectionedDay onClick={() => {setIsDay5Selected(!isDay5Selected)}}>S</SelectionedDay>
+                        <SelectionedDay onClick={() => {setIsDay5Selected(!isDay5Selected); arrSelectedDays(5,false)}}>S</SelectionedDay>
                         :
-                        <DiselectionedDay onClick={() => {setIsDay5Selected(!isDay5Selected)}}>S</DiselectionedDay> 
+                        <DiselectionedDay onClick={() => {setIsDay5Selected(!isDay5Selected); arrSelectedDays(5,true)}}>S</DiselectionedDay> 
                         }
                         {isDay6Selected ? 
-                        <SelectionedDay onClick={() => {setIsDay6Selected(!isDay6Selected)}}>S</SelectionedDay>
+                        <SelectionedDay onClick={() => {setIsDay6Selected(!isDay6Selected); arrSelectedDays(6,false)}}>S</SelectionedDay>
                         :
-                        <DiselectionedDay onClick={() => {setIsDay6Selected(!isDay6Selected)}}>S</DiselectionedDay> 
+                        <DiselectionedDay onClick={() => {setIsDay6Selected(!isDay6Selected); arrSelectedDays(6,true)}}>S</DiselectionedDay> 
                         }
                     </DaysSelection>
-                    <SaveButton>Salvar</SaveButton>
+                    <SaveButton type="submit">Salvar</SaveButton>
                     <CancelButton onClick={() => {props.setIsCreateHabit(false)}}>Cancelar</CancelButton>
                 </Form>
             </CreatingDiv>
@@ -165,7 +198,7 @@ const DaysSelection = styled.div`
     justify-content: start;
 `;
 
-const SaveButton = styled.div`
+const SaveButton = styled.button`
     height: 35px;
     background-color: #52B6FF;
     border-radius: 4.63636px;
@@ -183,6 +216,7 @@ const SaveButton = styled.div`
     position: absolute;
     bottom: 18px;
     right: 18px;
+    border: none;
 `;
 
 const CancelButton = styled.div`

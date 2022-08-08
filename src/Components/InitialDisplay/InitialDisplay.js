@@ -5,14 +5,17 @@ import { useState } from "react";
 import axios from "axios";
 import { useContext } from "react";
 import UserContext from "../../contexts/UserContext";
+import { ThreeDots } from "react-loader-spinner";
 
 export default function InitialDisplay(){
     const { tasks, setTasks } = useContext(UserContext);
     const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
     function logIn (event) {
         event.preventDefault();
+        setIsLoading(true);
 		const requisition = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", {
 			email: email,
 			password: password
@@ -28,9 +31,16 @@ export default function InitialDisplay(){
             <Content>
                 <Logo src={Group8} alt='app logo'/>
                 <Form onSubmit={logIn}>
-                    <Input placeholder="email" type="email" required onChange={e => setEmail(e.target.value)}/>
-                    <Input placeholder="senha" type="password" required onChange={e => setPassword(e.target.value)}/>
-                    <Button type="submit">Entrar</Button>
+                    <Input placeholder="email" disabled={isLoading} type="email" required onChange={e => setEmail(e.target.value)}/>
+                    <Input placeholder="senha" disabled={isLoading} type="password" required onChange={e => setPassword(e.target.value)}/>
+                    {isLoading ?
+                    <Button disabled><ThreeDots 
+                    color={'white'} 
+                    height={30} 
+                    width={30}/></Button>
+                    :
+                    <Button type="submit" disabled={isLoading}>Entrar</Button>
+                    }
                 </Form>
                 <Link to="/cadastro">
                     <Register>Não tem uma conta? Cadastre-se!</Register>
@@ -99,6 +109,9 @@ const Button = styled.button`
     color: #FFFFFF;
     border: none;
     margin-bottom: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const Register = styled.p`

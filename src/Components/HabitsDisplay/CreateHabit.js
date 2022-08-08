@@ -1,62 +1,9 @@
 import styled from 'styled-components';
-import { useNavigate } from "react-router-dom";
 import { useState , useEffect } from "react";
 import axios from "axios";
-import { useContext } from "react";
-import UserContext from "../../contexts/UserContext";
-import Habit from './Habit';
-import CreateHabit from './CreateHabit';
+import { ThreeDots } from 'react-loader-spinner';
 
-export default function HabitsDisplay(){
-    const { tasks, setTasks } = useContext(UserContext);
-    const [habitsContent, setHabitsContent] = useState(<></>);
-    const [refreshHabitsList, setRefreshHabitsList] = useState(false);
-    const [isCreateHabit, setIsCreateHabit] = useState(false);
-    const navigate = useNavigate();
-    useEffect(() => {
-        const requisition = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", {
-            headers: {"Authorization": `Bearer ${tasks.token}`} 
-		});
-        requisition.catch(() => {alert("Erro ao carregar os hábitos! Tente novamente!")});
-        requisition.then(renderHabits);
-        function renderHabits(answer){
-            let habitsList = answer.data;
-            if(habitsList.length === 0){
-                setHabitsContent(
-                    <NonHabitsText>
-                        Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!
-                    </NonHabitsText>
-                );
-            }
-            if(habitsList.length !== 0){
-                setHabitsContent(habitsList.map((habito,index) => <Habit key={index} days={habito.days} name={habito.name} token={tasks.token} id={habito.id} setRefreshHabitsList={setRefreshHabitsList} refreshHabitsList={refreshHabitsList}/>));
-            }
-        }
-    },[refreshHabitsList]);
-    return(
-        <>
-            <Header>
-                TrackIt
-                <UserPic src={tasks.image} alt='user profile pic'/>
-            </Header>
-            <Content>
-                <Title>
-                    <p>Meus hábitos</p>
-                    <PlusIcon><ion-icon name="add-outline" onClick={() => {setIsCreateHabit(true)}}></ion-icon></PlusIcon>
-                </Title>
-                {isCreateHabit ? <CreateHabit setIsCreateHabit={setIsCreateHabit} setRefreshHabitsList={setRefreshHabitsList} refreshHabitsList={refreshHabitsList} token={tasks.token}/> : <></>}
-                {habitsContent}
-            </Content>
-            <Footer>
-                <FooterButton onClick={() => navigate('/habitos')}>Hábitos</FooterButton>
-                <TodayButton onClick={() => navigate('/hoje')}>Hoje</TodayButton>
-                <FooterButton onClick={() => navigate('/historico')}>Histórico</FooterButton>
-            </Footer>
-        </>
-    )
-}
-
-/* function CreateHabit(props){
+export default function CreateHabit(props){
     const [habit, setHabit] = useState("");
     const [isDay1Selected, setIsDay1Selected] = useState(false);
     const [isDay2Selected, setIsDay2Selected] = useState(false);
@@ -66,6 +13,7 @@ export default function HabitsDisplay(){
     const [isDay6Selected, setIsDay6Selected] = useState(false);
     const [isDay7Selected, setIsDay7Selected] = useState(false);
     const [arrSelected, setArrSelected] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     function arrSelectedDays(num,ans){
         if(ans === true){
             arrSelected.push(num);
@@ -85,7 +33,8 @@ export default function HabitsDisplay(){
     }
     function saveHabit (event) {
         event.preventDefault();
-        props.setIsLoading(true);
+        setIsLoading(true);
+        console.log('renderizando create habit');
         if(arrSelected.length === 0){
             alert("Selecione o(s) dia(s) do hábito!");
         }else{
@@ -96,7 +45,7 @@ export default function HabitsDisplay(){
             requisition.catch(() => {alert("O hábito não foi salvado! Tente novamente!")});
             requisition.then((answer) => {
                 props.setIsCreateHabit(false);
-                props.setIsLoading(false);
+                setIsLoading(false);
                 props.setRefreshHabitsList(!props.refreshHabitsList);
             });
         }
@@ -143,13 +92,21 @@ export default function HabitsDisplay(){
                         <DiselectionedDay onClick={() => {setIsDay6Selected(!isDay6Selected); arrSelectedDays(6,true)}}>S</DiselectionedDay> 
                         }
                     </DaysSelection>
-                    <SaveButton type="submit" disabled={props.isLoading}>Salvar</SaveButton>
-                    <CancelButton onClick={() => {props.setIsCreateHabit(false)}} disabled={props.isLoading}>Cancelar</CancelButton>
+                    {isLoading ?
+                    <SaveButton disabled><ThreeDots 
+                    color={'white'} 
+                    height={25} 
+                    width={25}/></SaveButton>
+                    :
+                    <SaveButton type="submit" disabled={isLoading}>Salvar</SaveButton>
+                    }
+                    <CancelButton onClick={() => {props.setIsCreateHabit(false)}} disabled={isLoading}>Cancelar</CancelButton>
                 </Form>
             </CreatingDiv>
         </>
     );
-} */
+}
+
 
 const NonHabitsText = styled.div`
     font-family: 'Lexend Deca';

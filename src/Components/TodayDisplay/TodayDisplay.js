@@ -59,6 +59,7 @@ export default function TodayDisplay(){
             }
         }
     },[refreshHabitsList]);
+    console.log('renderizando');
     return(
         <>
             <Header>

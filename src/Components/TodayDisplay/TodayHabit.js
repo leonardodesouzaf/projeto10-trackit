@@ -36,14 +36,6 @@ export default function TodayHabit(props){
         setIsRecord(true);
         }
     },[])
-    function makeCounterCheck(){
-        if(props.done === true){
-            props.setCounterDone(props.counterDone + 1);
-        }
-        if(props.done === false){
-            props.setCounterUndone(props.counterUndone + 1);
-        }
-    }
     return(
         <>
             <Habit>
@@ -55,8 +47,7 @@ export default function TodayHabit(props){
                         <Flexing>Seu recorde: <SeqText> {props.highestSequence} dias</SeqText></Flexing></>
                         :
                         <>
-                        <>Sequência atual: {props.currentSequence} dias
-                        <br/>
+                        <><Flexing>Sequência atual: <SeqText> {props.currentSequence} dias</SeqText></Flexing>
                         Seu recorde: {props.highestSequence} dias</>
                         </>
                         }

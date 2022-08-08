@@ -26,9 +26,12 @@ export default function Habit(props){
         habitRenderDays.pop();
     }
     function removeHabit(){
-        const requisition = axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${props.id}`,{headers: {"Authorization": `Bearer ${props.token}`}});
+        let answer = window.confirm('Deseja apagar esse hábito?');
+        if(answer === true){
+            const requisition = axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${props.id}`,{headers: {"Authorization": `Bearer ${props.token}`}});
             requisition.catch(() => {alert("O hábito não foi removido! Tente novamente!")});
             requisition.then((answer) => {props.setRefreshHabitsList(!props.refreshHabitsList)});
+        }
     }
     return(
         <>

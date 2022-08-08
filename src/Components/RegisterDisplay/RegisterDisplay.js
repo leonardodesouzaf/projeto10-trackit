@@ -3,15 +3,18 @@ import styled from 'styled-components';
 import { useNavigate , Link } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import { ThreeDots } from "react-loader-spinner";
 
 export default function RegisterDisplay(){
     const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
     const [name, setName] = useState("");
 	const [picture, setPicture] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     function registerIn (event) {
         event.preventDefault();
+        setIsLoading(true);
 		const requisition = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up", {
 			email: email,
             name: name,
@@ -26,11 +29,18 @@ export default function RegisterDisplay(){
             <Content>
                 <Logo src={Group8} alt='app logo'/>
                 <Form onSubmit={registerIn}>
-                    <Input placeholder="email" type="email" required onChange={e => setEmail(e.target.value)}/>
-                    <Input placeholder="senha" type="password" required onChange={e => setPassword(e.target.value)}/>
-                    <Input placeholder="nome" type="text" required onChange={e => setName(e.target.value)}/>
-                    <Input placeholder="foto" type="url" required onChange={e => setPicture(e.target.value)}/>
-                    <Button type="submit">Cadastrar</Button>
+                    <Input placeholder="email" disabled={isLoading} type="email" required onChange={e => setEmail(e.target.value)}/>
+                    <Input placeholder="senha" disabled={isLoading} type="password" required onChange={e => setPassword(e.target.value)}/>
+                    <Input placeholder="nome" disabled={isLoading} type="text" required onChange={e => setName(e.target.value)}/>
+                    <Input placeholder="foto" disabled={isLoading} type="url" required onChange={e => setPicture(e.target.value)}/>
+                    {isLoading ?
+                    <Button disabled><ThreeDots 
+                    color={'white'} 
+                    height={30} 
+                    width={30}/></Button>
+                    :
+                    <Button type="submit" disabled={isLoading}>Cadastrar</Button>
+                    }
                 </Form>
                 <Link to="/">
                     <Register>Já tem uma conta? Faça login!</Register>
@@ -49,6 +59,8 @@ const Form = styled.form`
 
 const Content = styled.div`
     width: 100vw;
+    background-color: white;
+    height: 100vh;
 	display: flex;
     flex-direction: column;
     align-items: center;
@@ -97,6 +109,9 @@ const Button = styled.button`
     color: #FFFFFF;
     border: none;
     margin-bottom: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const Register = styled.p`

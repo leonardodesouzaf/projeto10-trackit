@@ -19,13 +19,15 @@ export default function HabitsDisplay(){
         requisition.then(renderHabits);
         function renderHabits(answer){
             let habitsList = answer.data;
-            if(answer.data === []){
+            console.log(habitsList);
+            if(habitsList.length === 0){
                 setHabitsContent(
-                    <>
+                    <NonHabitsText>
                         Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!
-                    </>
+                    </NonHabitsText>
                 );
-            }else{
+            }
+            if(habitsList.length !== 0){
                 setHabitsContent(habitsList.map((habito,index) => <Habit key={index} days={habito.days} name={habito.name} token={tasks.token} id={habito.id} setRefreshHabitsList={setRefreshHabitsList} refreshHabitsList={refreshHabitsList}/>));
             }
         }
@@ -150,6 +152,16 @@ function CreateHabit(props){
         </>
     );
 }
+
+const NonHabitsText = styled.div`
+    font-family: 'Lexend Deca';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 17.976px;
+    line-height: 22px;
+    color: #666666;
+    margin-top: 22px;
+`;
 
 const DiselectionedDay = styled.div`
     background-color: #FFFFFF;
@@ -362,7 +374,6 @@ const Content = styled.div`
     box-sizing: border-box;
     padding: 70px 17px 70px 17px;
     margin-bottom: 10px;
-    background-color: #EBEBEB;
 `;
 
 const UserPic = styled.img`

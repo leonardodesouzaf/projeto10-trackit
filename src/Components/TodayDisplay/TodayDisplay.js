@@ -107,6 +107,8 @@ export default function TodayDisplay(){
     )
 }
 
+
+
 const HabitsList = styled.div`
     
 `;
@@ -137,7 +139,7 @@ const TodayButton = styled.div`
     font-style: normal;
     font-weight: 400;
     font-size: 17.976px;
-    line-height: 22px;
+    line-height: 10px;
     color: #52B6FF;
     border-radius: 50%;
     color: white;

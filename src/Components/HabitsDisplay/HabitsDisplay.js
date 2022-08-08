@@ -29,49 +29,9 @@ export default function HabitsDisplay(){
             }
         }
     },[]);
-    const [isDay1Selected, setIsDay1Selected] = useState(false);
-    console.log(isDay1Selected);
-    const [creatingHabit, setCreatingHabit] = useState(<></>);
-    const [habit, setHabit] = useState("");
-    const day1d= 
-    [<>
-        <DiselectionedDay onClick={() => {setDay1render(day1s); renderCreatingHabit();}}>S</DiselectionedDay>
-    </>];
-    const [day1render, setDay1render] = useState(day1d);
-    const day1s= 
-    <>
-        <SelectionedDay onClick={() => {setDay1render(day1d); renderCreatingHabit();}}>S</SelectionedDay>
-    </>;
-    /* function saveHabit (event) {
-        event.preventDefault();
-		const requisition = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", {
-			name: habit,
-		});
-        requisition.catch(() => {alert("Problema ao salvar hábito! Tente novamente!")});
-        requisition.then((answer) => {});
-    } */
+    const [isCreateHabit, setIsCreateHabit] = useState(false);
+    const [createHabit, setCreateHabit] = useState(<></>);
     const [clickDay1, setClickDay1] = useState(false);
-    function renderCreatingHabit(){
-        setCreatingHabit(
-            <>
-                <CreatingDiv>
-                    <Form /* onSubmit={saveHabit} */>
-                        <Input placeholder="nome do hábito" type="text" required onChange={e => setHabit(e.target.value)}></Input>
-                        <DaysSelection>
-                            {isDay1Selected ? 
-                            <SelectionedDay onClick={() => {setIsDay1Selected(!isDay1Selected); console.log('clicadinha')}}>S</SelectionedDay>
-                            :
-                            <DiselectionedDay onClick={() => {setIsDay1Selected(!isDay1Selected); console.log('clicadinha melhor')}}>S</DiselectionedDay> 
-                            }
-                            {/* <DayDiv itsClicked={clickDay1} onClick={() => {setClickDay1(!clickDay1); renderCreatingHabit();}}>S</DayDiv> */}
-                        </DaysSelection>
-                        <SaveButton>Salvar</SaveButton>
-                        <CancelButton onClick={() => {setCreatingHabit(<></>)}}>Cancelar</CancelButton>
-                    </Form>
-                </CreatingDiv>
-            </>
-        );
-    }
     return(
         <>
             <Header>
@@ -81,9 +41,9 @@ export default function HabitsDisplay(){
             <Content>
                 <Title>
                     <p>Meus hábitos</p>
-                    <PlusIcon><ion-icon name="add-outline" onClick={renderCreatingHabit}></ion-icon></PlusIcon>
+                    <PlusIcon><ion-icon name="add-outline" onClick={() => {setIsCreateHabit(true)}}></ion-icon></PlusIcon>
                 </Title>
-                {creatingHabit}
+                {isCreateHabit ? <CreateHabit setIsCreateHabit={setIsCreateHabit}/> : <></>}
                 {habitsContent}
             </Content>
             <Footer>
@@ -95,25 +55,69 @@ export default function HabitsDisplay(){
     )
 }
 
-const DayDiv = styled.div`
-    background-color: ${(props) => (props.itsClicked ? "gray":"white")};
-    border: 1px solid #D5D5D5;
-    box-sizing: border-box;
-    border-radius: 5px;
-    width: 8vw;
-    height: 30px;
-    font-family: 'Lexend Deca';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 19.976px;
-    line-height: 25px;
-    color: #DBDBDB;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    margin-right: 4px;
-`;
+function CreateHabit(props){
+    const [habit, setHabit] = useState("");
+    const [isDay1Selected, setIsDay1Selected] = useState(false);
+    const [isDay2Selected, setIsDay2Selected] = useState(false);
+    const [isDay3Selected, setIsDay3Selected] = useState(false);
+    const [isDay4Selected, setIsDay4Selected] = useState(false);
+    const [isDay5Selected, setIsDay5Selected] = useState(false);
+    const [isDay6Selected, setIsDay6Selected] = useState(false);
+    const [isDay7Selected, setIsDay7Selected] = useState(false);
+    const [arrSelected, setArrSelected] = useState([]);
+    function arrSelectedDays(ans){
+
+    }
+
+    return(
+        <>
+            <CreatingDiv>
+                <Form /* onSubmit={saveHabit} */>
+                    <Input placeholder="nome do hábito" type="text" required onChange={e => setHabit(e.target.value)}></Input>
+                    <DaysSelection>
+                        {isDay7Selected ? 
+                        <SelectionedDay onClick={() => {setIsDay7Selected(!isDay7Selected); arrSelectedDays(true)}}>D</SelectionedDay>
+                        :
+                        <DiselectionedDay onClick={() => {setIsDay7Selected(!isDay7Selected)}}>D</DiselectionedDay> 
+                        }
+                        {isDay1Selected ? 
+                        <SelectionedDay onClick={() => {setIsDay1Selected(!isDay1Selected)}}>S</SelectionedDay>
+                        :
+                        <DiselectionedDay onClick={() => {setIsDay1Selected(!isDay1Selected)}}>S</DiselectionedDay> 
+                        }
+                        {isDay2Selected ? 
+                        <SelectionedDay onClick={() => {setIsDay2Selected(!isDay2Selected)}}>T</SelectionedDay>
+                        :
+                        <DiselectionedDay onClick={() => {setIsDay2Selected(!isDay2Selected)}}>T</DiselectionedDay> 
+                        }
+                        {isDay3Selected ? 
+                        <SelectionedDay onClick={() => {setIsDay3Selected(!isDay3Selected)}}>Q</SelectionedDay>
+                        :
+                        <DiselectionedDay onClick={() => {setIsDay3Selected(!isDay3Selected)}}>Q</DiselectionedDay> 
+                        }
+                        {isDay4Selected ? 
+                        <SelectionedDay onClick={() => {setIsDay4Selected(!isDay4Selected)}}>Q</SelectionedDay>
+                        :
+                        <DiselectionedDay onClick={() => {setIsDay4Selected(!isDay4Selected)}}>Q</DiselectionedDay> 
+                        }
+                        {isDay5Selected ? 
+                        <SelectionedDay onClick={() => {setIsDay5Selected(!isDay5Selected)}}>S</SelectionedDay>
+                        :
+                        <DiselectionedDay onClick={() => {setIsDay5Selected(!isDay5Selected)}}>S</DiselectionedDay> 
+                        }
+                        {isDay6Selected ? 
+                        <SelectionedDay onClick={() => {setIsDay6Selected(!isDay6Selected)}}>S</SelectionedDay>
+                        :
+                        <DiselectionedDay onClick={() => {setIsDay6Selected(!isDay6Selected)}}>S</DiselectionedDay> 
+                        }
+                    </DaysSelection>
+                    <SaveButton>Salvar</SaveButton>
+                    <CancelButton onClick={() => {props.setIsCreateHabit(false)}}>Cancelar</CancelButton>
+                </Form>
+            </CreatingDiv>
+        </>
+    );
+}
 
 const DiselectionedDay = styled.div`
     background-color: #FFFFFF;

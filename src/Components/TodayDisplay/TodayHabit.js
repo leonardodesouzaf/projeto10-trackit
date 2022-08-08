@@ -10,6 +10,8 @@ export default function TodayHabit(props){
     const { tasks, setTasks } = useContext(UserContext);
     const [isRecord, setIsRecord] = useState(false);
     function doneHabit(){
+        props.setCounterDone(props.counterDone + 1);
+        props.setCounterUndone(props.counterUndone - 1);
         const requisition = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${props.id}/check`, {}, {
             headers: {"Authorization": `Bearer ${tasks.token}`} 
 		});
@@ -19,6 +21,8 @@ export default function TodayHabit(props){
         });
     }
     function undoneHabit(){
+        props.setCounterUndone(props.counterUndone + 1);
+        props.setCounterDone(props.counterDone - 1);
         const requisition = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${props.id}/uncheck`, {}, {
             headers: {"Authorization": `Bearer ${tasks.token}`} 
 		});
@@ -32,6 +36,14 @@ export default function TodayHabit(props){
         setIsRecord(true);
         }
     },[])
+    function makeCounterCheck(){
+        if(props.done === true){
+            props.setCounterDone(props.counterDone + 1);
+        }
+        if(props.done === false){
+            props.setCounterUndone(props.counterUndone + 1);
+        }
+    }
     return(
         <>
             <Habit>

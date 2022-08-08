@@ -14,8 +14,13 @@ export default function TodayDisplay(){
     const navigate = useNavigate();
     const [habitsContent, setHabitsContent] = useState(<></>);
     const [refreshHabitsList, setRefreshHabitsList] = useState(false);
+    const [counterDone, setCounterDone] = useState(0);
+    const [counterUndone, setCounterUndone] = useState(0);
+    const [isGreenSubtitle, setIsGreenSubtitle] = useState(false);
+    const [perCentCounter, setPerCentCounter] = useState(0);
     useEffect(() => {
-        console.log('use effect aqui');
+        let counterOfDone = 0;
+        let counterOfUndone = 0;
         const requisition = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", {
             headers: {"Authorization": `Bearer ${tasks.token}`} 
 		});
@@ -31,7 +36,26 @@ export default function TodayDisplay(){
                 );
             }
             if(habitsList.length !== 0){
-                setHabitsContent(habitsList.map((habito,index) => <TodayHabit key={index} done={habito.done} name={habito.name} token={tasks.token} id={habito.id} currentSequence={habito.currentSequence} highestSequence={habito.highestSequence} setRefreshHabitsList={setRefreshHabitsList} refreshHabitsList={refreshHabitsList}/>));
+                setHabitsContent(habitsList.map((habito,index) => {
+                if(habito.done === true){
+                    counterOfDone++;
+                    setCounterDone(counterOfDone);
+                }
+                if(habito.done === false){
+                    counterOfUndone++;
+                    setCounterUndone(counterOfUndone);
+                }
+                return(<TodayHabit key={index} done={habito.done} name={habito.name} token={tasks.token} id={habito.id} currentSequence={habito.currentSequence} highestSequence={habito.highestSequence} setRefreshHabitsList={setRefreshHabitsList} refreshHabitsList={refreshHabitsList} counterDone={counterDone} setCounterDone={setCounterDone} counterUndone={counterUndone} setCounterUndone={setCounterUndone}/>);
+            }));
+            }
+            console.log(isGreenSubtitle,'passei aqui');
+            if(counterOfDone !== 0){
+                let perCent = (counterOfDone/habitsList.length)*100;
+                setPerCentCounter(perCent.toFixed(0));
+                setIsGreenSubtitle(true);
+            }
+            if(counterOfDone === 0){
+                setIsGreenSubtitle(false);
             }
         }
     },[refreshHabitsList]);
@@ -45,9 +69,15 @@ export default function TodayDisplay(){
                 <DayName>
                     {dayName.format("dddd")}, {dayName.format("DD/MM")}
                 </DayName>
+                {isGreenSubtitle ?
+                <CompleteRateGreen>
+                    {perCentCounter}% dos hábitos concluídos
+                </CompleteRateGreen>
+                :
                 <CompleteRate>
                     Nenhum hábito concluído ainda
                 </CompleteRate>
+                }
                 <HabitsList>
                     {habitsContent}
                 </HabitsList>
@@ -63,6 +93,16 @@ export default function TodayDisplay(){
 
 const HabitsList = styled.div`
     
+`;
+
+const CompleteRateGreen = styled.div`
+    font-family: 'Lexend Deca';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 17.976px;
+    line-height: 22px;
+    color: #8FC549;
+    margin-bottom: 28px;
 `;
 
 const NonHabitsText = styled.div`

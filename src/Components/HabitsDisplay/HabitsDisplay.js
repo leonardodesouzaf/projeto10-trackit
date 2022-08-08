@@ -29,27 +29,44 @@ export default function HabitsDisplay(){
             }
         }
     },[]);
+    const [isDay1Selected, setIsDay1Selected] = useState(false);
+    console.log(isDay1Selected);
     const [creatingHabit, setCreatingHabit] = useState(<></>);
     const [habit, setHabit] = useState("");
-    function saveHabit (event) {
+    const day1d= 
+    [<>
+        <DiselectionedDay onClick={() => {setDay1render(day1s); renderCreatingHabit();}}>S</DiselectionedDay>
+    </>];
+    const [day1render, setDay1render] = useState(day1d);
+    const day1s= 
+    <>
+        <SelectionedDay onClick={() => {setDay1render(day1d); renderCreatingHabit();}}>S</SelectionedDay>
+    </>;
+    /* function saveHabit (event) {
         event.preventDefault();
 		const requisition = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", {
 			name: habit,
 		});
         requisition.catch(() => {alert("Problema ao salvar hábito! Tente novamente!")});
         requisition.then((answer) => {});
-    }
+    } */
+    const [clickDay1, setClickDay1] = useState(false);
     function renderCreatingHabit(){
         setCreatingHabit(
             <>
                 <CreatingDiv>
-                    <Form onSubmit={saveHabit}>
+                    <Form /* onSubmit={saveHabit} */>
                         <Input placeholder="nome do hábito" type="text" required onChange={e => setHabit(e.target.value)}></Input>
-                        <DaysSelection>maue
-
+                        <DaysSelection>
+                            {isDay1Selected ? 
+                            <SelectionedDay onClick={() => {setIsDay1Selected(!isDay1Selected); console.log('clicadinha')}}>S</SelectionedDay>
+                            :
+                            <DiselectionedDay onClick={() => {setIsDay1Selected(!isDay1Selected); console.log('clicadinha melhor')}}>S</DiselectionedDay> 
+                            }
+                            {/* <DayDiv itsClicked={clickDay1} onClick={() => {setClickDay1(!clickDay1); renderCreatingHabit();}}>S</DayDiv> */}
                         </DaysSelection>
                         <SaveButton>Salvar</SaveButton>
-                        <CancelButton>Cancelar</CancelButton>
+                        <CancelButton onClick={() => {setCreatingHabit(<></>)}}>Cancelar</CancelButton>
                     </Form>
                 </CreatingDiv>
             </>
@@ -77,6 +94,66 @@ export default function HabitsDisplay(){
         </>
     )
 }
+
+const DayDiv = styled.div`
+    background-color: ${(props) => (props.itsClicked ? "gray":"white")};
+    border: 1px solid #D5D5D5;
+    box-sizing: border-box;
+    border-radius: 5px;
+    width: 8vw;
+    height: 30px;
+    font-family: 'Lexend Deca';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 19.976px;
+    line-height: 25px;
+    color: #DBDBDB;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-right: 4px;
+`;
+
+const DiselectionedDay = styled.div`
+    background-color: #FFFFFF;
+    border: 1px solid #D5D5D5;
+    box-sizing: border-box;
+    border-radius: 5px;
+    width: 8vw;
+    height: 30px;
+    font-family: 'Lexend Deca';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 19.976px;
+    line-height: 25px;
+    color: #DBDBDB;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-right: 4px;
+`;
+
+const SelectionedDay = styled.div`
+    background-color: #CFCFCF;
+    border: 1px solid #D5D5D5;
+    box-sizing: border-box;
+    border-radius: 5px;
+    width: 8vw;
+    height: 30px;
+    font-family: 'Lexend Deca';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 19.976px;
+    line-height: 25px;
+    color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-right: 4px;
+`;
 
 const DaysSelection = styled.div`
     display: flex;
@@ -279,3 +356,30 @@ const Header = styled.div`
     top: 0;
     left: 0;
 `;
+
+
+
+    /* const [selectionedHabits, setSelectionedHabits] = useState([1,2]);
+    const [habitDays, setHabitDays] = useState([]);
+    let arrayDays = [...selectionedHabits];
+    const weekDays = ['S','T','Q','Q','S','S','D'];
+    if(habitDays.length<7){
+        for(let i=0; i<7; i++){
+            let weekDay = i+1;
+            let itsEqual = false;
+            for(let j=0; j<arrayDays.length; j++){
+                if(arrayDays[j]===weekDay){
+                    habitDays.push(<SelectionedDay key={i}>{weekDays[i]}</SelectionedDay>);
+                    itsEqual = true;
+                }
+            }
+            if(itsEqual === false){    
+                habitDays.push(<DiselectionedDay onClick={() => {selectionedHabits.push(weekDay)}} key={i}>{weekDays[i]}</DiselectionedDay>);
+            }
+        }
+    }
+    let habitRenderDays;
+    if(habitDays.length === 7){
+        habitRenderDays = [habitDays.at(-1), ...habitDays];
+        habitRenderDays.pop();
+    } */

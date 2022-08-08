@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useNavigate , Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import dayjs from 'dayjs';
 import { useContext } from "react";
@@ -15,6 +15,7 @@ export default function TodayDisplay(){
     const [habitsContent, setHabitsContent] = useState(<></>);
     const [refreshHabitsList, setRefreshHabitsList] = useState(false);
     useEffect(() => {
+        console.log('use effect aqui');
         const requisition = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", {
             headers: {"Authorization": `Bearer ${tasks.token}`} 
 		});
@@ -30,7 +31,7 @@ export default function TodayDisplay(){
                 );
             }
             if(habitsList.length !== 0){
-                setHabitsContent(habitsList.map((habito,index) => <TodayHabit key={index} done={habito.done} name={habito.name} token={tasks.token} id={habito.id} currentSequence={habito.currentSequence} highestSequence={habito.highestSequence}/>));
+                setHabitsContent(habitsList.map((habito,index) => <TodayHabit key={index} done={habito.done} name={habito.name} token={tasks.token} id={habito.id} currentSequence={habito.currentSequence} highestSequence={habito.highestSequence} setRefreshHabitsList={setRefreshHabitsList} refreshHabitsList={refreshHabitsList}/>));
             }
         }
     },[refreshHabitsList]);
@@ -53,7 +54,7 @@ export default function TodayDisplay(){
             </Content>
             <Footer>
                 <FooterButton onClick={() => navigate('/habitos')}>Hábitos</FooterButton>
-                <TodayButton>Hoje</TodayButton>
+                <TodayButton onClick={() => navigate('/hoje')}>Hoje</TodayButton>
                 <FooterButton onClick={() => navigate('/historico')}>Histórico</FooterButton>
             </Footer>
         </>

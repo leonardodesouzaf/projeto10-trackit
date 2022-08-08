@@ -1,27 +1,79 @@
 import styled from 'styled-components';
-import { useState } from "react";
+import { useState , useEffect } from "react";
 import axios from "axios";
 import { useContext } from "react";
 import UserContext from "../../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 export default function TodayHabit(props){
+    const navigate = useNavigate();
     const { tasks, setTasks } = useContext(UserContext);
+    const [isRecord, setIsRecord] = useState(false);
+    function doneHabit(){
+        const requisition = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${props.id}/check`, {}, {
+            headers: {"Authorization": `Bearer ${tasks.token}`} 
+		});
+        requisition.catch(() => {alert("Hábito já foi marcado como feito!")});
+        requisition.then(() => {
+            props.setRefreshHabitsList(!props.refreshHabitsList);
+        });
+    }
+    function undoneHabit(){
+        const requisition = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${props.id}/uncheck`, {}, {
+            headers: {"Authorization": `Bearer ${tasks.token}`} 
+		});
+        requisition.catch(() => {alert("Hábito já está marcado como não feito!")});
+        requisition.then(() => {
+            props.setRefreshHabitsList(!props.refreshHabitsList);
+        });
+    }
+    useEffect(() => {
+        if(props.currentSequence >= props.highestSequence){
+        setIsRecord(true);
+        }
+    },[])
     return(
         <>
             <Habit>
                 <Texts>
                     <Title>{props.name}</Title>
                     <Subitle>
-                        Sequência atual: {props.currentSequence} dias
+                        {isRecord ? 
+                        <><Flexing>Sequência atual: <SeqText> {props.currentSequence} dias</SeqText></Flexing>
+                        <Flexing>Seu recorde: <SeqText> {props.highestSequence} dias</SeqText></Flexing></>
+                        :
+                        <>
+                        <>Sequência atual: {props.currentSequence} dias
                         <br/>
-                        Seu recorde: {props.highestSequence} dias
+                        Seu recorde: {props.highestSequence} dias</>
+                        </>
+                        }
                     </Subitle>
                 </Texts>
-                <Icon><ion-icon name="checkbox"></ion-icon></Icon>
+                {props.done ? <IconCheck onClick={undoneHabit}><ion-icon name="checkbox"></ion-icon></IconCheck>
+                :
+                <Icon onClick={doneHabit}><ion-icon name="checkbox"></ion-icon></Icon>}
             </Habit>
         </>
     )
 }
+
+const Flexing = styled.div`
+    display: flex;
+`;
+
+const SeqText = styled.div`
+    color: #8FC549;
+    margin-left: 3px;
+`;
+
+const IconCheck = styled.div`
+    color: #8FC549;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 80px;
+`;
 
 const Texts = styled.div`
     margin-left: 7px;

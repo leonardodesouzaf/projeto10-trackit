@@ -34,7 +34,7 @@ This project was fundamental to apply concepts like:
 
 ## Screenshots
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/leonardodesouzaf/projeto10-trackit/blob/main/readme-img.png?raw=true)
 
 
 ## Run Locally

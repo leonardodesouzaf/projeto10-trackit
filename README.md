@@ -67,7 +67,7 @@ Start the server
 
 ## Deployment
 
-<a href="https://projeto9-cineflex-six-flax.vercel.app">Deploy via Vercel</a>
+<a href="https://projeto10-trackit-ten-virid.vercel.app">Deploy via Vercel</a>
 
 ## Authors
 

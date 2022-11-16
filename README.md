@@ -3,6 +3,18 @@
 
 The TrackIt app is a modern way for you to keep track of your habits, allowing you to manage them through the home page, you can see the habits of the day, your tracks records and the completed ones. Messy life? Let's start to TrackIt! 📈
 
+## Technologies 
+
+<div align="center">
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-plain-wordmark.svg" height="40" width="52" alt="html5 logo"  />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-plain-wordmark.svg" height="40" width="52" alt="css3 logo"  />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" height="40" width="52" alt="javascript logo"  />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original-wordmark.svg" height="40" width="52" alt="react logo"  />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" height="40" width="52" alt="nodejs logo"  />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/npm/npm-original-wordmark.svg" height="40" width="52" alt="npm logo"  />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-plain-wordmark.svg" height="40" width="52" alt="git logo"  />
+</div>
+
 ## Features
 
 - Mobile layout 
@@ -59,5 +71,5 @@ Start the server
 
 ## Authors
 
-- [Leonardo de Souza Ferreira](https://www.github.com/leonardodesouzaf)
+[Leonardo de Souza Ferreira](https://www.github.com/leonardodesouzaf)
 

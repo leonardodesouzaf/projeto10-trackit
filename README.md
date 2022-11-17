@@ -18,19 +18,25 @@ The TrackIt app is a modern way for you to keep track of your habits, allowing y
 ## Features
 
 - Mobile layout 
-- Login/Register brings privacity
+- Login/Register to access the app
 - Easy and simple to use
-- Styled Components 
-- Dynamism with Node libs
+- Dynamic app with Node libs
+- Add/Delete habits of the week
+- Home page with user daily progress and records
 
 
-## Lessons Learned
+## Knowledges
 
-This project was fundamental to apply concepts like:
+To do this project was fundamental to apply concepts like:
 
+- Usage of Axios lib to do the connection with the API
+- React componentization of the elements
+- Create the routes of the app with the react-router-dom lib
+- Styled Components to prevent className conflicts
 - Provide a personal and secure experience to the user with the Login/Register account
 - The usage of useContext to prevent the prop drilling problem
-- Bring dynamism to the application with these Node libs: react-loader-spinner and react-circular-progressbar
+- The usage of useEffect and useState to better render performance
+- Bring dynamism to the application with these libs: react-loader-spinner and react-circular-progressbar
 
 ## Screenshots
 
